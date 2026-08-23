@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contoso-retail
+  namespace: contoso
+  labels:
+    app: contoso-retail
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: contoso-retail
+
+  template:
+    metadata:
+      labels:
+        app: contoso-retail
+
+    spec:
+      containers:
+        - name: contoso-retail
+
+          image: acrcontosoretail2026.azurecr.io/contoso-retail-web:v1
+
+          ports:
+            - containerPort: 8000
+
+          envFrom:
+            - configMapRef:
+                name: contoso-config
+
+            - secretRef:
+                name: contoso-secret
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /health
+
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: contoso-config
+  namespace: contoso
+data:
+  APP_NAME: "Contoso Retail"
+  APP_ENV: "production"

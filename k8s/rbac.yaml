@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: contoso-readonly
+  namespace: contoso
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: contoso-readonly
+  namespace: contoso
+rules:
+  - apiGroups: [""]
+    resources:
+      - pods
+      - services
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+
+  - apiGroups: ["apps"]
+    resources:
+      - deployments
+      - replicasets
+    verbs:
+      - get
+      - list
+      - watch
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: contoso-readonly
+  namespace: contoso
+subjects:
+  - kind: ServiceAccount
+    name: contoso-readonly
+    namespace: contoso
+roleRef:
+  kind: Role
+  name: contoso-readonly
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: contoso-retail-service
+  namespace: contoso
+spec:
+  type: LoadBalancer
+  selector:
+    app: contoso-retail
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
